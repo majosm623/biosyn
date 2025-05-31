@@ -1,178 +1,325 @@
-:root {
-            --primary: #3498db;
-            --primary-dark: #2980b9;
-            --danger: #ff4d4f;
-            --success: #52c41a;
-            --white: #ffffff;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --gray: #95a5a6;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--light);
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: var(--white);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            color: var(--dark);
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .doctor-selector {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: var(--white);
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--gray);
-            border-radius: 5px;
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        .calendar {
-            margin-top: 30px;
-        }
-        
-        .weekdays {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .weekday {
-            text-align: center;
-            font-weight: bold;
-            padding: 10px;
-            background: var(--primary);
-            color: var(--white);
-            border-radius: 5px;
-        }
-        
-        .time-slots {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-        }
-        
-        .time-column {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .time-slot {
-            padding: 12px;
-            text-align: center;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-            border: 2px solid transparent;
-        }
-        
-        .morning {
-            background-color: #e6f7ff;
-            border-color: #91d5ff;
-            color: var(--primary);
-        }
-        
-        .afternoon {
-            background-color: #f6ffed;
-            border-color: #b7eb8f;
-            color: var(--success);
-        }
-        
-        .available {
-            background-color: var(--primary);
-            color: var(--white);
-        }
-        
-        .unavailable {
-            background-color: var(--danger);
-            color: var(--white);
-            cursor: not-allowed;
-        }
-        
-        .selected {
-            background-color: var(--success);
-            color: var(--white);
-            transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(82,196,26,0.5);
-        }
-        
-        .legend {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-        }
-        
-        .confirmation {
-            margin-top: 30px;
-            padding: 20px;
-            background: var(--light);
-            border-radius: 8px;
-            display: none;
-        }
-        
-        button {
-            padding: 10px 20px;
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        button:hover {
-            background: var(--primary-dark);
-        }
-        
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: var(--white);
-            animation: spin 1s ease-in-out infinite;
-            margin-left: 10px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+/* Reset básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.container {
+    background: white;
+    max-width: 900px;
+    width: 100%;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Títulos */
+h1, h2, h3, h4 {
+    margin-bottom: 15px;
+    color: #222;
+}
+
+h1 {
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Doctor selector */
+.doctor-selector {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.doctor-selector > div {
+    flex: 1 1 200px;
+}
+
+.doctor-selector h3 {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border: 1.8px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Calendario */
+
+.calendar {
+    margin-bottom: 35px;
+}
+
+.month-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.month-header button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.3rem;
+    color: #007bff;
+    padding: 6px 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.month-header button:hover {
+    background-color: #e6f0ff;
+}
+
+.month-title {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background-color: #007bff;
+    color: white;
+    padding: 10px 0;
+    font-weight: 600;
+    border-radius: 8px 8px 0 0;
+}
+
+.weekday {
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Days grid */
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    padding-bottom: 15px;
+    border-radius: 0 0 8px 8px;
+    user-select: none;
+}
+
+/* Día individual */
+.day {
+    background-color: #f9f9f9;
+    padding: 12px 0;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+    font-weight: 500;
+}
+
+.day:hover:not(.disabled):not(.selected) {
+    background-color: #d6e9ff;
+}
+
+.day.disabled {
+    color: #bbb;
+    cursor: default;
+    background-color: #f0f0f0;
+}
+
+.day.selected {
+    background-color: #007bff;
+    color: white;
+    font-weight: 700;
+    border-color: #0056b3;
+}
+
+/* Time slots container */
+
+.time-slots-container {
+    margin-top: 20px;
+}
+
+.time-period {
+    margin-bottom: 30px;
+}
+
+.time-period h3 {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+}
+
+.time-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 12px;
+}
+
+/* Slots individuales */
+.time-slot {
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    user-select: none;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.time-slot.available {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #28a745;
+}
+
+.time-slot.available:hover {
+    background-color: #28a745;
+    color: white;
+    border-color: #19692c;
+}
+
+.time-slot.unavailable {
+    background-color: #f8d7da;
+    color: #721c24;
+    cursor: default;
+    border-color: #dc3545;
+}
+
+.time-slot.booked {
+    background-color: #ffeeba;
+    color: #856404;
+    cursor: default;
+    border-color: #ffc107;
+}
+
+.time-slot.selected {
+    background-color: #007bff;
+    color: white;
+    font-weight: 700;
+    border-color: #0056b3;
+}
+
+/* Leyenda */
+
+.legend {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.available-legend {
+    background-color: #28a745;
+}
+
+.unavailable-legend {
+    background-color: #dc3545;
+}
+
+.booked-legend {
+    background-color: #ffc107;
+}
+
+/* Confirmación */
+
+#confirmation {
+    margin-top: 30px;
+    background-color: #e9f5ff;
+    border: 2px solid #007bff;
+    padding: 20px;
+    border-radius: 8px;
+    display: none;
+    text-align: center;
+}
+
+#confirmation h3 {
+    margin-bottom: 15px;
+    color: #007bff;
+}
+
+#confirmation p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+#confirm-btn {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 14px 30px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#confirm-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Íconos con margen */
+h1 i, h3 i {
+    color: #007bff;
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+    .doctor-selector {
+        flex-direction: column;
+    }
+
+    .time-grid {
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    }
+
+    h1 {
+        font-size: 1.7rem;
+    }
+}
