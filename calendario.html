@@ -5,191 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disponibilidad de Médicos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        h1 i {
-            margin-right: 10px;
-            color: #3498db;
-        }
-        
-        .doctor-selector {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .doctor-selector > div {
-            flex: 1;
-            min-width: 250px;
-        }
-        
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            background-color: #f8f9fa;
-        }
-        
-        .time-period {
-            margin-bottom: 30px;
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        
-        .time-period h3 {
-            color: #2c3e50;
-            margin-top: 0;
-            margin-bottom: 15px;
-        }
-        
-        .time-period h3 i {
-            margin-right: 10px;
-        }
-        
-        .time-grid {
-            display: flex;
-            overflow-x: auto;
-            gap: 10px;
-            padding-bottom: 10px;
-        }
-        
-        .day-column {
-            min-width: 120px;
-            flex-shrink: 0;
-        }
-        
-        .day-header {
-            background-color: #3498db;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            border-radius: 5px 5px 0 0;
-            font-weight: bold;
-        }
-        
-        .date-header {
-            background-color: #2980b9;
-            color: white;
-            padding: 5px;
-            text-align: center;
-            font-size: 12px;
-        }
-        
-        .time-slots {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background-color: white;
-            padding: 10px;
-            border-radius: 0 0 5px 5px;
-            border: 1px solid #ddd;
-            border-top: none;
-        }
-        
-        .time-slot {
-            padding: 8px;
-            text-align: center;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .time-slot:hover {
-            transform: scale(1.05);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        
-        .morning {
-            background-color: #f6e58d;
-        }
-        
-        .afternoon {
-            background-color: #ffbe76;
-        }
-        
-        .available {
-            background-color: #55efc4;
-            cursor: pointer;
-        }
-        
-        .available:hover {
-            background-color: #00b894;
-        }
-        
-        .unavailable {
-            background-color: #dfe6e9;
-            color: #636e72;
-            cursor: not-allowed;
-        }
-        
-        .legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 30px;
-            justify-content: center;
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-        }
-        
-        .morning-legend {
-            background-color: #f6e58d;
-        }
-        
-        .afternoon-legend {
-            background-color: #ffbe76;
-        }
-        
-        .available-legend {
-            background-color: #55efc4;
-        }
-        
-        .unavailable-legend {
-            background-color: #dfe6e9;
-        }
-        
-        @media (max-width: 768px) {
-            .doctor-selector {
-                flex-direction: column;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/calendario.css">
 </head>
 <body>
     <div class="container">
@@ -239,20 +55,16 @@
             
             <div class="legend">
                 <div class="legend-item">
-                    <div class="legend-color morning-legend"></div>
-                    <span>Horario mañana</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color afternoon-legend"></div>
-                    <span>Horario tarde</span>
-                </div>
-                <div class="legend-item">
                     <div class="legend-color available-legend"></div>
                     <span>Disponible</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color unavailable-legend"></div>
-                    <span>No disponible</span>
+                    <div class="legend-color no-agenda-legend"></div>
+                    <span>No hay agenda</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color closed-legend"></div>
+                    <span>Sin agenda</span>
                 </div>
             </div>
         </div>
@@ -383,12 +195,13 @@
                 
                 // Mañana
                 morningSlots.forEach(time => {
-                    availability[index][time] = Math.random() > 0.3 ? 1 : 0;
+                    // 0 = Sin agenda (rojo), 1 = Disponible (verde), 2 = No hay agenda (azul)
+                    availability[index][time] = Math.floor(Math.random() * 3);
                 });
                 
                 // Tarde
                 afternoonSlots.forEach(time => {
-                    availability[index][time] = Math.random() > 0.3 ? 1 : 0;
+                    availability[index][time] = Math.floor(Math.random() * 3);
                 });
             });
             
@@ -423,18 +236,21 @@
                 morningSlotsContainer.className = 'time-slots';
                 
                 morningSlots.forEach(time => {
-                    const isAvailable = availability[dayIndex][time] > 0;
+                    const status = availability[dayIndex][time];
                     
                     const slot = document.createElement('div');
-                    slot.className = `time-slot morning ${isAvailable ? 'available' : 'unavailable'}`;
-                    slot.textContent = time;
+                    slot.className = 'time-slot';
                     
-                    if (isAvailable) {
-                        slot.addEventListener('click', () => {
-                            alert(`Has seleccionado la cita para el ${dateStr} a las ${time} horas.`);
-                        });
+                    // Asignar clase según disponibilidad
+                    if (status === 1) {
+                        slot.classList.add('available');
+                    } else if (status === 2) {
+                        slot.classList.add('no-agenda');
+                    } else {
+                        slot.classList.add('closed');
                     }
                     
+                    slot.textContent = time;
                     morningSlotsContainer.appendChild(slot);
                 });
                 
@@ -454,18 +270,21 @@
                 afternoonSlotsContainer.className = 'time-slots';
                 
                 afternoonSlots.forEach(time => {
-                    const isAvailable = availability[dayIndex][time] > 0;
+                    const status = availability[dayIndex][time];
                     
                     const slot = document.createElement('div');
-                    slot.className = `time-slot afternoon ${isAvailable ? 'available' : 'unavailable'}`;
-                    slot.textContent = time;
+                    slot.className = 'time-slot';
                     
-                    if (isAvailable) {
-                        slot.addEventListener('click', () => {
-                            alert(`Has seleccionado la cita para el ${dateStr} a las ${time} horas.`);
-                        });
+                    // Asignar clase según disponibilidad
+                    if (status === 1) {
+                        slot.classList.add('available');
+                    } else if (status === 2) {
+                        slot.classList.add('no-agenda');
+                    } else {
+                        slot.classList.add('closed');
                     }
                     
+                    slot.textContent = time;
                     afternoonSlotsContainer.appendChild(slot);
                 });
                 
