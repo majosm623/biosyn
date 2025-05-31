@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cita Confirmada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .confirmation-icon {
+            font-size: 80px;
+            color: #4CAF50;
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .appointment-details {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .appointment-details p {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        
+        .appointment-details strong {
+            color: #2c3e50;
+        }
+        
+        .btn-home {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        
+        .btn-home:hover {
+            background: #2980b9;
+        }
+        
+        .btn-home i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="confirmation-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1>¡Cita Confirmada!</h1>
+        <p>Tu cita médica ha sido agendada exitosamente.</p>
+        
+        <div class="appointment-details" id="appointment-details">
+            <!-- Los detalles de la cita se cargarán aquí con JavaScript -->
+        </div>
+        
+        <a href="index.html" class="btn-home">
+            <i class="fas fa-home"></i> Volver al inicio
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Obtener el ID de la cita de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const appointmentId = urlParams.get('id');
+            
+            if (!appointmentId) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Buscar la cita en el localStorage
+            const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+            const appointment = appointments.find(a => a.id === appointmentId);
+            
+            if (!appointment) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Mostrar los detalles de la cita
+            const detailsContainer = document.getElementById('appointment-details');
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = new Date(appointment.date).toLocaleDateString('es-ES', options);
+            
+            detailsContainer.innerHTML = `
+                <p><strong>Médico:</strong> ${appointment.doctor}</p>
+                <p><strong>Especialidad:</strong> ${appointment.specialty}</p>
+                <p><strong>Fecha:</strong> ${formattedDate}</p>
+                <p><strong>Hora:</strong> ${appointment.time}</p>
+                <p><strong>Número de cita:</strong> ${appointment.id}</p>
+            `;
+        });
+    </script>
+</body>
+</html>
