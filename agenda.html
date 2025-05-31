@@ -34,7 +34,7 @@
     </select>
 
     <h3>Seleccione un médico:</h3>
-    <select id="doctor-select">
+    <select id="specialty-select">
         <option value="">-- Seleccione un médico --</option>
     </select>
 </div>
@@ -101,6 +101,42 @@
 
    
     <script>
+    const doctorsBySpecialty = {
+        "Cardiología": ["Dr. Javier López"],
+        "Pediatría": ["Dra. Ana Martínez"],
+        "Ortopedia": ["Dr. Carlos Rodríguez"],
+        "Dermatología": ["Dra. Laura García"],
+        "Ginecología": ["Dra. Sofía Pérez"],
+        "Neurología": ["Dr. Ricardo González"],
+        "Oftalmología": ["Dra. Patricia Morales"],
+        "Psiquiatría": ["Dr. Ernesto Silva"],
+        "Endocrinología": ["Dra. Gabriela Núñez"],
+        "Gastroenterología": ["Dr. Luis Fernández"],
+        "Oncología": ["Dra. Mariana Ortega"],
+        "Neumología": ["Dr. Oscar Jiménez"],
+        "Urología": ["Dr. Luis Herrera"],
+        "Medicina Interna": ["Dra. Claudia Díaz"],
+        "Cirugía Plástica": ["Dr. Andrés Guzmán"]
+    };
+
+    const specialtySelect = document.getElementById("specialty-select");
+    const doctorSelect = document.getElementById("doctor-select");
+
+    specialtySelect.addEventListener("change", function () {
+        const selectedSpecialty = this.value;
+        doctorSelect.innerHTML = `<option value="">-- Seleccione un médico --</option>`;
+
+        if (selectedSpecialty && doctorsBySpecialty[selectedSpecialty]) {
+            doctorsBySpecialty[selectedSpecialty].forEach(doctor => {
+                const option = document.createElement("option");
+                option.value = doctor;
+                option.textContent = doctor;
+                doctorSelect.appendChild(option);
+            });
+        }
+    });
+
+
         // Variables globales
         let selectedSlot = null;
         let currentDoctor = null;
