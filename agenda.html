@@ -9,91 +9,44 @@
     <link rel="stylesheet" href="css/agenda.css">
 </head>
 <body>
-    <div class="container">
-        <h1><i class="fas fa-calendar-alt"></i> Agndamiento de citas</h1>
-        
-        <div class="doctor-selector">
-            <div>
-                <h3>Especialidad:</h3>
-                <select id="specialty-select">
-                    <option value="">Todas las especialidades</option>
-                    <option value="Cardiología">Cardiología</option>
-                    <option value="Pediatría">Pediatría</option>
-                    <option value="Ortopedia">Ortopedia</option>
-                    <option value="Dermatología">Dermatología</option>
-                    <option value="Ginecología">Ginecología</option>
-                    <option value="Neurología">Neurología</option>
-                    <option value="Oftalmología">Oftalmología</option>
-                    <option value="Psiquiatría">Psiquiatría</option>
-                    <option value="Endocrinología">Endocrinología</option>
-                    <option value="Gastroenterología">Gastroenterología</option>
-                    <option value="Oncología">Oncología</option>
-                    <option value="Neumología">Neumología</option>
-                    <option value="Urología">Urología</option>
-                    <option value="Medicina Interna">Medicina Interna</option>
-                    <option value="Cirugía Plástica">Cirugía Plástica</option>
-                </select>
-            </div>
+    <h1>Agendar Cita Médica</h1>
 
-            <div>
-                <h3>Médico:</h3>
-                <select id="doctor-select">
-                    <option value="">Seleccione un médico</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="calendar">
-            <div class="month-header">
-                <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
-                <div class="month-title" id="month-title">Mes Año</div>
-                <button id="next-month"><i class="fas fa-chevron-right"></i></button>
-            </div>
-            <div class="weekdays">
-                <div class="weekday">Dom</div>
-                <div class="weekday">Lun</div>
-                <div class="weekday">Mar</div>
-                <div class="weekday">Mié</div>
-                <div class="weekday">Jue</div>
-                <div class="weekday">Vie</div>
-                <div class="weekday">Sáb</div>
-            </div>
-            <div class="days" id="days-container"></div>
-        </div>
-        
-        <div id="time-slots-container" class="time-slots-container">
-            <h2 id="selected-date-header"></h2>
-            <div class="time-period">
-                <h3><i class="fas fa-sun"></i> Turno Mañana (7:00 - 12:00)</h3>
-                <div id="morning-slots" class="time-grid"></div>
-            </div>
-            
-            <div class="time-period">
-                <h3><i class="fas fa-moon"></i> Turno Tarde (14:00 - 18:00)</h3>
-                <div id="afternoon-slots" class="time-grid"></div>
-            </div>
-            
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-color available-legend"></div>
-                    <span>Disponible</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color unavailable-legend"></div>
-                    <span>No disponible</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color booked-legend"></div>
-                    <span>Reservado</span>
-                </div>
-            </div>
-        </div>
+    <div>
+        <label for="specialty-select">Especialidad:</label><br/>
+        <select id="specialty-select">
+            <option value="">-- Seleccione especialidad --</option>
+            <option value="Cardiología">Cardiología</option>
+            <option value="Pediatría">Pediatría</option>
+            <option value="Ortopedia">Ortopedia</option>
+            <option value="Dermatología">Dermatología</option>
+            <!-- Más especialidades -->
+        </select>
     </div>
-    <div style="margin-top: 20px; text-align: center;">
-    <button id="confirm-btn" class="confirm-button">
-        <i class="fas fa-calendar-check"></i> Confirmar Cita
-    </button>
-</div>
+
+    <div>
+        <label for="doctor-select">Médico:</label><br/>
+        <select id="doctor-select">
+            <option value="">Seleccione un médico</option>
+        </select>
+    </div>
+
+    <h3>Seleccione un día:</h3>
+    <div id="days-container"></div>
+
+    <h3>Horarios disponibles</h3>
+    <div>
+        <strong>Turno Mañana (07:00 - 12:00)</strong>
+        <div id="morning-slots"></div>
+    </div>
+    <div>
+        <strong>Turno Tarde (14:00 - 18:00)</strong>
+        <div id="afternoon-slots"></div>
+    </div>
+
+    <div id="confirmation" style="display:none;">
+        <p id="confirmation-text"></p>
+        <button id="confirm-btn">Confirmar cita</button>
+    </div>
 
    <script>
         // Datos de ejemplo
