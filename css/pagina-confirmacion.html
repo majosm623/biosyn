@@ -2,69 +2,73 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Confirmación de Cita</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .confirmation-container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            color: #28a745;
-            margin-bottom: 10px;
-        }
-
-        p {
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-
-        .back-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .back-button:hover {
-            background-color: #0056b3;
-        }
-
-        .check-icon {
-            font-size: 60px;
-            color: #28a745;
-            margin-bottom: 20px;
-        }
-    </style>
+    <title>Cita Confirmada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="calendario.css">
 </head>
 <body>
-    <div class="confirmation-container">
-        <div class="check-icon">
-            <i class="fas fa-check-circle"></i>
+    <div class="container">
+        <div class="confirmation-box">
+            <div class="confirmation-header">
+                <i class="fas fa-check-circle"></i>
+                <h1>Cita Médica Confirmada</h1>
+            </div>
+            
+            <div class="appointment-details" id="appointment-details">
+                <p><strong>Número de cita:</strong> <span id="appointment-id"></span></p>
+                <p><strong>Paciente:</strong> <span id="patient-name"></span></p>
+                <p><strong>Médico:</strong> <span id="doctor-name"></span></p>
+                <p><strong>Especialidad:</strong> <span id="specialty-name"></span></p>
+                <p><strong>Fecha:</strong> <span id="appointment-date"></span></p>
+                <p><strong>Hora:</strong> <span id="appointment-time"></span></p>
+                <p><strong>Teléfono:</strong> <span id="patient-phone"></span></p>
+            </div>
+            
+            <div class="confirmation-message">
+                <p>Hemos enviado los detalles de su cita a su correo electrónico. Por favor llegue 15 minutos antes de su cita.</p>
+                <p>Si necesita cancelar o reprogramar, llame al 123-456-7890.</p>
+            </div>
+            
+            <button class="btn-home" onclick="window.location.href='citas.html'">
+                <i class="fas fa-home"></i> Volver al inicio
+            </button>
         </div>
-        <h1>¡Cita Confirmada!</h1>
-        <p>Tu cita médica ha sido registrada correctamente.</p>
-        <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a la agenda</a>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obtener ID de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const appointmentId = urlParams.get('id');
+            
+            if (!appointmentId) {
+                window.location.href = 'citas.html';
+                return;
+            }
+            
+            // Buscar cita en localStorage
+            const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+            const appointment = appointments.find(a => a.id === appointmentId);
+            
+            if (!appointment) {
+                window.location.href = 'citas.html';
+                return;
+            }
+            
+            // Mostrar detalles de la cita
+            document.getElementById('appointment-id').textContent = appointment.id;
+            document.getElementById('patient-name').textContent = appointment.patientName;
+            document.getElementById('doctor-name').textContent = appointment.doctor;
+            document.getElementById('specialty-name').textContent = appointment.specialty;
+            document.getElementById('patient-phone').textContent = appointment.patientPhone;
+            document.getElementById('appointment-time').textContent = appointment.time;
+            
+            // Formatear fecha
+            const date = new Date(appointment.date);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('appointment-date').textContent = date.toLocaleDateString('es-ES', options);
+        });
+    </script>
 </body>
 </html>
