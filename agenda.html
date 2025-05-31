@@ -57,23 +57,20 @@
     <button id="confirm-btn" onclick="confirmAppointment()">
         <i class="fas fa-calendar-check"></i> Confirmar cita
     </button>
-</div>
-        <div class="calendar">
-            <div class="weekdays">
-                <div class="weekday">Lunes</div>
-                <div class="weekday">Martes</div>
-                <div class="weekday">Miércoles</div>
-                <div class="weekday">Jueves</div>
-                <div class="weekday">Viernes</div>
-            </div>
-            
-            <h3>Horario Mañana (7:00 AM - 12:00 PM)</h3>
-            <div class="time-slots" id="morning-slots">
-            </div>
-            <h3 style="margin-top: 20px;">Horario Tarde (2:00 PM - 5:00 PM)</h3>
-            <div class="time-slots" id="afternoon-slots">
-            </div>
+    
+    <div class="calendar">
+        <div class="weekdays">
+        <div class="weekday">Lunes</div>
+        <div class="weekday">Martes</div>
+        <div class="weekday">Miércoles</div>
+        <div class="weekday">Jueves</div>
+        <div class="weekday">Viernes</div>
         </div>
+        <h3>Horario Mañana (7:00 AM - 12:00 PM)</h3>
+        <div class="time-slots" id="morning-slots"></div>
+        <h3 style="margin-top: 20px;">Horario Tarde (2:00 PM - 5:00 PM)</h3>
+        <div class="time-slots" id="afternoon-slots"></div>
+    </div>
         
         <div class="legend">
             <div class="legend-item">
@@ -433,6 +430,85 @@
                 btn.innerHTML = originalText;
             }
         }
+        
+    let selectedSlot = null;
+    let currentDoctor = null;
+
+    // Crear horarios por la mañana
+    const morningSlots = [];
+    for (let hour = 7; hour < 12; hour++) {
+        for (let minute = 0; minute < 60; minute += 15) {
+            morningSlots.push(`${hour}:${minute.toString().padStart(2, '0')}`);
+        }
+    }
+
+    // Crear horarios por la tarde
+    const afternoonSlots = [];
+    for (let hour = 14; hour < 17; hour++) {
+        for (let minute = 0; minute < 60; minute += 15) {
+            afternoonSlots.push(`${hour}:${minute.toString().padStart(2, '0')}`);
+        }
+    }
+
+    // Establecer fecha mínima en el selector
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById("appointment-date").setAttribute("min", today);
+
+    // Eventos al cambiar doctor o fecha
+    document.getElementById("appointment-date").addEventListener("change", handleChange);
+    document.getElementById("doctor-select").addEventListener("change", handleChange);
+
+    function handleChange() {
+        const doctor = document.getElementById("doctor-select").value;
+        const date = document.getElementById("appointment-date").value;
+
+        if (doctor && date) {
+            currentDoctor = doctor;
+            showTimeSlots();
+        }
+    }
+
+    function showTimeSlots() {
+        selectedSlot = null;
+        document.getElementById("confirmation").style.display = "none";
+        document.getElementById("time-slots-container").style.display = "block";
+
+        const morningContainer = document.getElementById("morning-slots");
+        const afternoonContainer = document.getElementById("afternoon-slots");
+        morningContainer.innerHTML = '';
+        afternoonContainer.innerHTML = '';
+
+        // Renderizar botones para los horarios
+        morningSlots.forEach(time => {
+            morningContainer.appendChild(createTimeSlotButton(time));
+        });
+
+        afternoonSlots.forEach(time => {
+            afternoonContainer.appendChild(createTimeSlotButton(time));
+        });
+    }
+
+    function createTimeSlotButton(time) {
+        const btn = document.createElement("button");
+        btn.textContent = time;
+        btn.className = "time-slot";
+        btn.onclick = () => selectSlot(time);
+        return btn;
+    }
+
+    function selectSlot(time) {
+        selectedSlot = time;
+        const date = document.getElementById("appointment-date").value;
+        document.getElementById("selected-slot-info").textContent = `Doctor: ${currentDoctor}, Fecha: ${date}, Hora: ${time}`;
+        document.getElementById("confirmation").style.display = "block";
+    }
+
+    function confirmAppointment() {
+        alert(`Cita confirmada con ${currentDoctor} el ${document.getElementById("appointment-date").value} a las ${selectedSlot}`);
+        // Aquí puedes hacer una llamada a la API para guardar la cita
+    }
+
+
     </script>
 </body>
 </html>
