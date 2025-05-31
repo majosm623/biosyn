@@ -121,423 +121,383 @@
             </div>
         </div>
         
-        <!-- Paso 3: Confirmación -->
+        <!-- Paso 3: Confirmación (versión simplificada) -->
         <div id="confirmation-step" class="selection-step hidden">
             <h2><i class="fas fa-check-circle"></i> Confirmar Cita</h2>
             
             <div class="appointment-summary">
+                <div class="confirmation-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
                 <h3>Resumen de la cita</h3>
-                <p><strong>Paciente:</strong> <span id="patient-name">[Nombre del paciente]</span></p>
                 <p><strong>Médico:</strong> <span id="confirm-doctor"></span></p>
                 <p><strong>Especialidad:</strong> <span id="confirm-specialty"></span></p>
                 <p><strong>Fecha:</strong> <span id="confirm-date"></span></p>
                 <p><strong>Hora:</strong> <span id="confirm-time"></span></p>
-            </div>
-            
-            <div class="patient-info">
-                <h3>Datos del paciente</h3>
-                <div class="form-group">
-                    <label for="patient-name-input"><i class="fas fa-user"></i> Nombre completo:</label>
-                    <input type="text" id="patient-name-input" required>
+                
+                <div class="confirmation-actions">
+                    <button id="back-to-schedule" class="btn-back">
+                        <i class="fas fa-arrow-left"></i> Modificar
+                    </button>
+                    <button id="confirm-appointment" class="btn-confirm">
+                        Confirmar Cita <i class="fas fa-calendar-check"></i>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label for="patient-phone"><i class="fas fa-phone"></i> Teléfono:</label>
-                    <input type="tel" id="patient-phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="patient-email"><i class="fas fa-envelope"></i> Email (opcional):</label>
-                    <input type="email" id="patient-email">
-                </div>
-                <div class="form-group">
-                    <label for="patient-notes"><i class="fas fa-file-medical"></i> Notas (opcional):</label>
-                    <textarea id="patient-notes" rows="3"></textarea>
-                </div>
-            </div>
-            
-            <div class="navigation-buttons">
-                <button id="back-to-schedule" class="btn-back">
-                    <i class="fas fa-arrow-left"></i> Anterior
-                </button>
-                <button id="confirm-appointment" class="btn-confirm">
-                    Confirmar Cita <i class="fas fa-calendar-check"></i>
-                </button>
             </div>
         </div>
     </div>
 
     <script>
         // Datos de médicos
-const doctors = [
-    { id: "dr1", nombres: "Javier", apellidos: "López", especialidad: "Cardiología" },
-    { id: "dr2", nombres: "Ana", apellidos: "Martínez", especialidad: "Pediatría" },
-    { id: "dr3", nombres: "Carlos", apellidos: "Rodríguez", especialidad: "Ortopedia" },
-    { id: "dr4", nombres: "Laura", apellidos: "García", especialidad: "Dermatología" },
-    { id: "dr5", nombres: "Sofía", apellidos: "Pérez", especialidad: "Ginecología" },
-    { id: "dr6", nombres: "Ricardo", apellidos: "González", especialidad: "Neurología" },
-    { id: "dr7", nombres: "Patricia", apellidos: "Morales", especialidad: "Oftalmología" },
-    { id: "dr8", nombres: "Ernesto", apellidos: "Silva", especialidad: "Psiquiatría" },
-    { id: "dr9", nombres: "Gabriela", apellidos: "Núñez", especialidad: "Endocrinología" },
-    { id: "dr10", nombres: "Luis", apellidos: "Fernández", especialidad: "Gastroenterología" },
-    { id: "dr11", nombres: "Mariana", apellidos: "Ortega", especialidad: "Oncología" },
-    { id: "dr12", nombres: "Oscar", apellidos: "Jiménez", especialidad: "Neumología" },
-    { id: "dr13", nombres: "Luis", apellidos: "Herrera", especialidad: "Urología" },
-    { id: "dr14", nombres: "Claudia", apellidos: "Díaz", especialidad: "Medicina Interna" },
-    { id: "dr15", nombres: "Andrés", apellidos: "Guzmán", especialidad: "Cirugía Plástica" }
-];
+        const doctors = [
+            { id: "dr1", nombres: "Javier", apellidos: "López", especialidad: "Cardiología" },
+            { id: "dr2", nombres: "Ana", apellidos: "Martínez", especialidad: "Pediatría" },
+            { id: "dr3", nombres: "Carlos", apellidos: "Rodríguez", especialidad: "Ortopedia" },
+            { id: "dr4", nombres: "Laura", apellidos: "García", especialidad: "Dermatología" },
+            { id: "dr5", nombres: "Sofía", apellidos: "Pérez", especialidad: "Ginecología" },
+            { id: "dr6", nombres: "Ricardo", apellidos: "González", especialidad: "Neurología" },
+            { id: "dr7", nombres: "Patricia", apellidos: "Morales", especialidad: "Oftalmología" },
+            { id: "dr8", nombres: "Ernesto", apellidos: "Silva", especialidad: "Psiquiatría" },
+            { id: "dr9", nombres: "Gabriela", apellidos: "Núñez", especialidad: "Endocrinología" },
+            { id: "dr10", nombres: "Luis", apellidos: "Fernández", especialidad: "Gastroenterología" },
+            { id: "dr11", nombres: "Mariana", apellidos: "Ortega", especialidad: "Oncología" },
+            { id: "dr12", nombres: "Oscar", apellidos: "Jiménez", especialidad: "Neumología" },
+            { id: "dr13", nombres: "Luis", apellidos: "Herrera", especialidad: "Urología" },
+            { id: "dr14", nombres: "Claudia", apellidos: "Díaz", especialidad: "Medicina Interna" },
+            { id: "dr15", nombres: "Andrés", apellidos: "Guzmán", especialidad: "Cirugía Plástica" }
+        ];
 
-// Variables de estado
-let currentWeek = 0;
-let selectedDoctor = null;
-let selectedDate = null;
-let selectedTime = null;
-let availability = {};
+        // Variables de estado
+        let currentWeek = 0;
+        let selectedDoctor = null;
+        let selectedDate = null;
+        let selectedTime = null;
+        let availability = {};
 
-// Elementos del DOM
-const specialtySelect = document.getElementById('specialty-select');
-const doctorSelect = document.getElementById('doctor-select');
-const nextToScheduleBtn = document.getElementById('next-to-schedule');
-const doctorSelectionStep = document.getElementById('doctor-selection');
-const scheduleSelectionStep = document.getElementById('schedule-selection');
-const confirmationStep = document.getElementById('confirmation-step');
-const backToDoctorBtn = document.getElementById('back-to-doctor');
-const nextToConfirmBtn = document.getElementById('next-to-confirm');
-const backToScheduleBtn = document.getElementById('back-to-schedule');
-const confirmAppointmentBtn = document.getElementById('confirm-appointment');
-const doctorNameDisplay = document.getElementById('doctor-name-display');
-const doctorSpecialtyDisplay = document.getElementById('doctor-specialty-display');
-const weekRangeDisplay = document.getElementById('week-range');
-const prevWeekBtn = document.getElementById('prev-week');
-const nextWeekBtn = document.getElementById('next-week');
-const morningSlotsContainer = document.getElementById('morning-slots');
-const afternoonSlotsContainer = document.getElementById('afternoon-slots');
-const confirmDoctorElement = document.getElementById('confirm-doctor');
-const confirmSpecialtyElement = document.getElementById('confirm-specialty');
-const confirmDateElement = document.getElementById('confirm-date');
-const confirmTimeElement = document.getElementById('confirm-time');
-const patientNameInput = document.getElementById('patient-name-input');
-const step1 = document.getElementById('step1');
-const step2 = document.getElementById('step2');
-const step3 = document.getElementById('step3');
+        // Elementos del DOM
+        const specialtySelect = document.getElementById('specialty-select');
+        const doctorSelect = document.getElementById('doctor-select');
+        const nextToScheduleBtn = document.getElementById('next-to-schedule');
+        const doctorSelectionStep = document.getElementById('doctor-selection');
+        const scheduleSelectionStep = document.getElementById('schedule-selection');
+        const confirmationStep = document.getElementById('confirmation-step');
+        const backToDoctorBtn = document.getElementById('back-to-doctor');
+        const nextToConfirmBtn = document.getElementById('next-to-confirm');
+        const backToScheduleBtn = document.getElementById('back-to-schedule');
+        const confirmAppointmentBtn = document.getElementById('confirm-appointment');
+        const doctorNameDisplay = document.getElementById('doctor-name-display');
+        const doctorSpecialtyDisplay = document.getElementById('doctor-specialty-display');
+        const weekRangeDisplay = document.getElementById('week-range');
+        const prevWeekBtn = document.getElementById('prev-week');
+        const nextWeekBtn = document.getElementById('next-week');
+        const morningSlotsContainer = document.getElementById('morning-slots');
+        const afternoonSlotsContainer = document.getElementById('afternoon-slots');
+        const confirmDoctorElement = document.getElementById('confirm-doctor');
+        const confirmSpecialtyElement = document.getElementById('confirm-specialty');
+        const confirmDateElement = document.getElementById('confirm-date');
+        const confirmTimeElement = document.getElementById('confirm-time');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
 
-// Horarios
-const morningSlots = ['7:00', '8:00', '9:00', '10:00', '11:00'];
-const afternoonSlots = ['14:00', '15:00', '16:00', '17:00'];
+        // Horarios
+        const morningSlots = ['7:00', '8:00', '9:00', '10:00', '11:00'];
+        const afternoonSlots = ['14:00', '15:00', '16:00', '17:00'];
 
-// Inicialización
-document.addEventListener('DOMContentLoaded', () => {
-    loadDoctors();
-    setupEventListeners();
-});
-
-function loadDoctors() {
-    doctorSelect.innerHTML = '<option value="">Seleccione un médico</option>';
-    
-    doctors.forEach(doctor => {
-        const option = document.createElement('option');
-        option.value = doctor.id;
-        option.textContent = `${doctor.nombres} ${doctor.apellidos} - ${doctor.especialidad}`;
-        option.dataset.specialty = doctor.especialidad;
-        doctorSelect.appendChild(option);
-    });
-}
-
-function setupEventListeners() {
-    // Selectores
-    specialtySelect.addEventListener('change', filterDoctors);
-    doctorSelect.addEventListener('change', updateDoctorSelection);
-    
-    // Navegación
-    nextToScheduleBtn.addEventListener('click', goToScheduleSelection);
-    backToDoctorBtn.addEventListener('click', goBackToDoctorSelection);
-    nextToConfirmBtn.addEventListener('click', goToConfirmation);
-    backToScheduleBtn.addEventListener('click', goBackToScheduleSelection);
-    confirmAppointmentBtn.addEventListener('click', confirmAppointment);
-    
-    // Navegación de semanas
-    prevWeekBtn.addEventListener('click', () => {
-        currentWeek--;
-        loadAvailability(selectedDoctor.id);
-    });
-    
-    nextWeekBtn.addEventListener('click', () => {
-        currentWeek++;
-        loadAvailability(selectedDoctor.id);
-    });
-}
-
-function filterDoctors() {
-    const specialty = specialtySelect.value;
-    
-    for (let i = 1; i < doctorSelect.options.length; i++) {
-        const option = doctorSelect.options[i];
-        option.style.display = !specialty || option.dataset.specialty === specialty ? '' : 'none';
-    }
-    
-    doctorSelect.value = '';
-    nextToScheduleBtn.disabled = true;
-}
-
-function updateDoctorSelection() {
-    const doctorId = doctorSelect.value;
-    selectedDoctor = doctorId ? doctors.find(d => d.id === doctorId) : null;
-    nextToScheduleBtn.disabled = !selectedDoctor;
-}
-
-function goToScheduleSelection() {
-    doctorSelectionStep.classList.add('hidden');
-    scheduleSelectionStep.classList.remove('hidden');
-    step1.classList.remove('active');
-    step2.classList.add('active');
-    
-    // Mostrar información del médico
-    doctorNameDisplay.textContent = `${selectedDoctor.nombres} ${selectedDoctor.apellidos}`;
-    doctorSpecialtyDisplay.textContent = selectedDoctor.especialidad;
-    
-    // Cargar disponibilidad
-    loadAvailability(selectedDoctor.id);
-}
-
-function goBackToDoctorSelection() {
-    scheduleSelectionStep.classList.add('hidden');
-    doctorSelectionStep.classList.remove('hidden');
-    step2.classList.remove('active');
-    step1.classList.add('active');
-}
-
-function loadAvailability(doctorId) {
-    // Simular carga de disponibilidad
-    availability = generateMockAvailability(doctorId, currentWeek);
-    updateWeekRangeDisplay();
-    renderTimeSlots();
-}
-
-function generateMockAvailability(doctorId, weekOffset) {
-    const availability = {};
-    const today = new Date();
-    const startDate = new Date(today);
-    
-    // Ajustar para el lunes de la semana actual + offset
-    startDate.setDate(today.getDate() + (1 - today.getDay()) + (weekOffset * 7));
-    
-    // Generar disponibilidad para los 5 días laborales
-    for (let day = 0; day < 5; day++) {
-        const currentDate = new Date(startDate);
-        currentDate.setDate(startDate.getDate() + day);
-        const dateKey = formatDate(currentDate);
-        
-        availability[day] = {
-            date: currentDate,
-            dateString: formatDateDisplay(currentDate),
-            morning: {},
-            afternoon: {}
-        };
-        
-        // Mañana
-        morningSlots.forEach(time => {
-            availability[day].morning[time] = Math.random() > 0.3;
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDoctors();
+            setupEventListeners();
         });
-        
-        // Tarde
-        afternoonSlots.forEach(time => {
-            availability[day].afternoon[time] = Math.random() > 0.3;
-        });
-    }
-    
-    return availability;
-}
 
-function updateWeekRangeDisplay() {
-    if (!availability[0]) return;
-    
-    const startDate = availability[0].date;
-    const endDate = new Date(availability[4].date);
-    
-    const options = { day: 'numeric', month: 'long' };
-    const startStr = startDate.toLocaleDateString('es-ES', options);
-    const endStr = endDate.toLocaleDateString('es-ES', options);
-    
-    weekRangeDisplay.textContent = `Semana del ${startStr} al ${endStr}`;
-}
-
-function renderTimeSlots() {
-    morningSlotsContainer.innerHTML = '';
-    afternoonSlotsContainer.innerHTML = '';
-    
-    const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-    
-    days.forEach((day, dayIndex) => {
-        const dayData = availability[dayIndex];
-        if (!dayData) return;
-        
-        // Mañana
-        const morningColumn = document.createElement('div');
-        morningColumn.className = 'day-column';
-        morningColumn.dataset.dayIndex = dayIndex;
-        
-        const morningHeader = document.createElement('div');
-        morningHeader.className = 'day-header';
-        morningHeader.textContent = `${day}\n${dayData.dateString}`;
-        morningColumn.appendChild(morningHeader);
-        
-        const morningSlotsDiv = document.createElement('div');
-        morningSlotsDiv.className = 'time-slots';
-        
-        morningSlots.forEach(time => {
-            const isAvailable = dayData.morning[time];
-            const slot = document.createElement('div');
-            slot.className = `time-slot morning ${isAvailable ? 'available' : 'unavailable'}`;
-            slot.textContent = time;
-            slot.dataset.time = time;
-            slot.dataset.dayIndex = dayIndex;
-            slot.dataset.period = 'morning';
+        function loadDoctors() {
+            doctorSelect.innerHTML = '<option value="">Seleccione un médico</option>';
             
-            if (isAvailable) {
-                slot.addEventListener('click', selectTimeSlot);
+            doctors.forEach(doctor => {
+                const option = document.createElement('option');
+                option.value = doctor.id;
+                option.textContent = `${doctor.nombres} ${doctor.apellidos} - ${doctor.especialidad}`;
+                option.dataset.specialty = doctor.especialidad;
+                doctorSelect.appendChild(option);
+            });
+        }
+
+        function setupEventListeners() {
+            // Selectores
+            specialtySelect.addEventListener('change', filterDoctors);
+            doctorSelect.addEventListener('change', updateDoctorSelection);
+            
+            // Navegación
+            nextToScheduleBtn.addEventListener('click', goToScheduleSelection);
+            backToDoctorBtn.addEventListener('click', goBackToDoctorSelection);
+            nextToConfirmBtn.addEventListener('click', goToConfirmation);
+            backToScheduleBtn.addEventListener('click', goBackToScheduleSelection);
+            confirmAppointmentBtn.addEventListener('click', confirmAppointment);
+            
+            // Navegación de semanas
+            prevWeekBtn.addEventListener('click', () => {
+                currentWeek--;
+                loadAvailability(selectedDoctor.id);
+            });
+            
+            nextWeekBtn.addEventListener('click', () => {
+                currentWeek++;
+                loadAvailability(selectedDoctor.id);
+            });
+        }
+
+        function filterDoctors() {
+            const specialty = specialtySelect.value;
+            
+            for (let i = 1; i < doctorSelect.options.length; i++) {
+                const option = doctorSelect.options[i];
+                option.style.display = !specialty || option.dataset.specialty === specialty ? '' : 'none';
             }
             
-            morningSlotsDiv.appendChild(slot);
-        });
-        
-        morningColumn.appendChild(morningSlotsDiv);
-        morningSlotsContainer.appendChild(morningColumn);
-        
-        // Tarde
-        const afternoonColumn = document.createElement('div');
-        afternoonColumn.className = 'day-column';
-        afternoonColumn.dataset.dayIndex = dayIndex;
-        
-        const afternoonHeader = document.createElement('div');
-        afternoonHeader.className = 'day-header';
-        afternoonHeader.textContent = `${day}\n${dayData.dateString}`;
-        afternoonColumn.appendChild(afternoonHeader);
-        
-        const afternoonSlotsDiv = document.createElement('div');
-        afternoonSlotsDiv.className = 'time-slots';
-        
-        afternoonSlots.forEach(time => {
-            const isAvailable = dayData.afternoon[time];
-            const slot = document.createElement('div');
-            slot.className = `time-slot afternoon ${isAvailable ? 'available' : 'unavailable'}`;
-            slot.textContent = time;
-            slot.dataset.time = time;
-            slot.dataset.dayIndex = dayIndex;
-            slot.dataset.period = 'afternoon';
+            doctorSelect.value = '';
+            nextToScheduleBtn.disabled = true;
+        }
+
+        function updateDoctorSelection() {
+            const doctorId = doctorSelect.value;
+            selectedDoctor = doctorId ? doctors.find(d => d.id === doctorId) : null;
+            nextToScheduleBtn.disabled = !selectedDoctor;
+        }
+
+        function goToScheduleSelection() {
+            doctorSelectionStep.classList.add('hidden');
+            scheduleSelectionStep.classList.remove('hidden');
+            step1.classList.remove('active');
+            step2.classList.add('active');
             
-            if (isAvailable) {
-                slot.addEventListener('click', selectTimeSlot);
+            // Mostrar información del médico
+            doctorNameDisplay.textContent = `${selectedDoctor.nombres} ${selectedDoctor.apellidos}`;
+            doctorSpecialtyDisplay.textContent = selectedDoctor.especialidad;
+            
+            // Cargar disponibilidad
+            loadAvailability(selectedDoctor.id);
+        }
+
+        function goBackToDoctorSelection() {
+            scheduleSelectionStep.classList.add('hidden');
+            doctorSelectionStep.classList.remove('hidden');
+            step2.classList.remove('active');
+            step1.classList.add('active');
+        }
+
+        function loadAvailability(doctorId) {
+            // Simular carga de disponibilidad
+            availability = generateMockAvailability(doctorId, currentWeek);
+            updateWeekRangeDisplay();
+            renderTimeSlots();
+        }
+
+        function generateMockAvailability(doctorId, weekOffset) {
+            const availability = {};
+            const today = new Date();
+            const startDate = new Date(today);
+            
+            // Ajustar para el lunes de la semana actual + offset
+            startDate.setDate(today.getDate() + (1 - today.getDay()) + (weekOffset * 7));
+            
+            // Generar disponibilidad para los 5 días laborales
+            for (let day = 0; day < 5; day++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + day);
+                const dateKey = formatDate(currentDate);
+                
+                availability[day] = {
+                    date: currentDate,
+                    dateString: formatDateDisplay(currentDate),
+                    morning: {},
+                    afternoon: {}
+                };
+                
+                // Mañana
+                morningSlots.forEach(time => {
+                    availability[day].morning[time] = Math.random() > 0.3;
+                });
+                
+                // Tarde
+                afternoonSlots.forEach(time => {
+                    availability[day].afternoon[time] = Math.random() > 0.3;
+                });
             }
             
-            afternoonSlotsDiv.appendChild(slot);
-        });
-        
-        afternoonColumn.appendChild(afternoonSlotsDiv);
-        afternoonSlotsContainer.appendChild(afternoonColumn);
-    });
-}
+            return availability;
+        }
 
-function selectTimeSlot(event) {
-    // Deseleccionar cualquier slot previo
-    document.querySelectorAll('.time-slot.selected').forEach(slot => {
-        slot.classList.remove('selected');
-    });
-    
-    // Seleccionar nuevo slot
-    const slot = event.target;
-    slot.classList.add('selected');
-    
-    // Actualizar selección
-    const dayIndex = slot.dataset.dayIndex;
-    const time = slot.dataset.time;
-    const period = slot.dataset.period;
-    
-    selectedDate = availability[dayIndex].date;
-    selectedTime = time;
-    
-    // Habilitar botón de siguiente
-    nextToConfirmBtn.disabled = false;
-}
+        function updateWeekRangeDisplay() {
+            if (!availability[0]) return;
+            
+            const startDate = availability[0].date;
+            const endDate = new Date(availability[4].date);
+            
+            const options = { day: 'numeric', month: 'long' };
+            const startStr = startDate.toLocaleDateString('es-ES', options);
+            const endStr = endDate.toLocaleDateString('es-ES', options);
+            
+            weekRangeDisplay.textContent = `Semana del ${startStr} al ${endStr}`;
+        }
 
-function goToConfirmation() {
-    if (!selectedDate || !selectedTime) return;
-    
-    scheduleSelectionStep.classList.add('hidden');
-    confirmationStep.classList.remove('hidden');
-    step2.classList.remove('active');
-    step3.classList.add('active');
-    
-    // Actualizar información de confirmación
-    confirmDoctorElement.textContent = `${selectedDoctor.nombres} ${selectedDoctor.apellidos}`;
-    confirmSpecialtyElement.textContent = selectedDoctor.especialidad;
-    
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    confirmDateElement.textContent = selectedDate.toLocaleDateString('es-ES', options);
-    confirmTimeElement.textContent = selectedTime;
-    
-    // Copiar nombre si ya estaba en el localStorage
-    const savedName = localStorage.getItem('patientName');
-    if (savedName) {
-        patientNameInput.value = savedName;
-    }
-}
+        function renderTimeSlots() {
+            morningSlotsContainer.innerHTML = '';
+            afternoonSlotsContainer.innerHTML = '';
+            
+            const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+            
+            days.forEach((day, dayIndex) => {
+                const dayData = availability[dayIndex];
+                if (!dayData) return;
+                
+                // Mañana
+                const morningColumn = document.createElement('div');
+                morningColumn.className = 'day-column';
+                morningColumn.dataset.dayIndex = dayIndex;
+                
+                const morningHeader = document.createElement('div');
+                morningHeader.className = 'day-header';
+                morningHeader.textContent = `${day}\n${dayData.dateString}`;
+                morningColumn.appendChild(morningHeader);
+                
+                const morningSlotsDiv = document.createElement('div');
+                morningSlotsDiv.className = 'time-slots';
+                
+                morningSlots.forEach(time => {
+                    const isAvailable = dayData.morning[time];
+                    const slot = document.createElement('div');
+                    slot.className = `time-slot morning ${isAvailable ? 'available' : 'unavailable'}`;
+                    slot.textContent = time;
+                    slot.dataset.time = time;
+                    slot.dataset.dayIndex = dayIndex;
+                    slot.dataset.period = 'morning';
+                    
+                    if (isAvailable) {
+                        slot.addEventListener('click', selectTimeSlot);
+                    }
+                    
+                    morningSlotsDiv.appendChild(slot);
+                });
+                
+                morningColumn.appendChild(morningSlotsDiv);
+                morningSlotsContainer.appendChild(morningColumn);
+                
+                // Tarde
+                const afternoonColumn = document.createElement('div');
+                afternoonColumn.className = 'day-column';
+                afternoonColumn.dataset.dayIndex = dayIndex;
+                
+                const afternoonHeader = document.createElement('div');
+                afternoonHeader.className = 'day-header';
+                afternoonHeader.textContent = `${day}\n${dayData.dateString}`;
+                afternoonColumn.appendChild(afternoonHeader);
+                
+                const afternoonSlotsDiv = document.createElement('div');
+                afternoonSlotsDiv.className = 'time-slots';
+                
+                afternoonSlots.forEach(time => {
+                    const isAvailable = dayData.afternoon[time];
+                    const slot = document.createElement('div');
+                    slot.className = `time-slot afternoon ${isAvailable ? 'available' : 'unavailable'}`;
+                    slot.textContent = time;
+                    slot.dataset.time = time;
+                    slot.dataset.dayIndex = dayIndex;
+                    slot.dataset.period = 'afternoon';
+                    
+                    if (isAvailable) {
+                        slot.addEventListener('click', selectTimeSlot);
+                    }
+                    
+                    afternoonSlotsDiv.appendChild(slot);
+                });
+                
+                afternoonColumn.appendChild(afternoonSlotsDiv);
+                afternoonSlotsContainer.appendChild(afternoonColumn);
+            });
+        }
 
-function goBackToScheduleSelection() {
-    confirmationStep.classList.add('hidden');
-    scheduleSelectionStep.classList.remove('hidden');
-    step3.classList.remove('active');
-    step2.classList.add('active');
-}
+        function selectTimeSlot(event) {
+            // Deseleccionar cualquier slot previo
+            document.querySelectorAll('.time-slot.selected').forEach(slot => {
+                slot.classList.remove('selected');
+            });
+            
+            // Seleccionar nuevo slot
+            const slot = event.target;
+            slot.classList.add('selected');
+            
+            // Actualizar selección
+            const dayIndex = slot.dataset.dayIndex;
+            const time = slot.dataset.time;
+            const period = slot.dataset.period;
+            
+            selectedDate = availability[dayIndex].date;
+            selectedTime = time;
+            
+            // Habilitar botón de siguiente
+            nextToConfirmBtn.disabled = false;
+        }
 
-function confirmAppointment() {
-    const patientName = patientNameInput.value.trim();
-    const patientPhone = document.getElementById('patient-phone').value.trim();
-    
-    if (!patientName || !patientPhone) {
-        alert('Por favor complete los campos obligatorios: Nombre y Teléfono');
-        return;
-    }
-    
-    // Guardar nombre para futuras citas
-    localStorage.setItem('patientName', patientName);
-    
-    // Crear objeto de cita
-    const appointment = {
-        id: generateAppointmentId(),
-        doctor: `${selectedDoctor.nombres} ${selectedDoctor.apellidos}`,
-        specialty: selectedDoctor.especialidad,
-        date: selectedDate,
-        time: selectedTime,
-        patientName: patientName,
-        patientPhone: patientPhone,
-        patientEmail: document.getElementById('patient-email').value.trim(),
-        notes: document.getElementById('patient-notes').value.trim(),
-        createdAt: new Date()
-    };
-    
-    // Guardar en localStorage (simulando base de datos)
-    saveAppointment(appointment);
-    
-    // Redirigir a página de confirmación
-    window.location.href = `confirmacion.html?id=${appointment.id}`;
-}
+        function goToConfirmation() {
+            if (!selectedDate || !selectedTime) return;
+            
+            scheduleSelectionStep.classList.add('hidden');
+            confirmationStep.classList.remove('hidden');
+            step2.classList.remove('active');
+            step3.classList.add('active');
+            
+            // Actualizar información de confirmación
+            confirmDoctorElement.textContent = `${selectedDoctor.nombres} ${selectedDoctor.apellidos}`;
+            confirmSpecialtyElement.textContent = selectedDoctor.especialidad;
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            confirmDateElement.textContent = selectedDate.toLocaleDateString('es-ES', options);
+            confirmTimeElement.textContent = selectedTime;
+        }
 
-function generateAppointmentId() {
-    return 'cita-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-}
+        function goBackToScheduleSelection() {
+            confirmationStep.classList.add('hidden');
+            scheduleSelectionStep.classList.remove('hidden');
+            step3.classList.remove('active');
+            step2.classList.add('active');
+        }
 
-function saveAppointment(appointment) {
-    let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-    appointments.push(appointment);
-    localStorage.setItem('appointments', JSON.stringify(appointments));
-}
+        function confirmAppointment() {
+            // Crear objeto de cita
+            const appointment = {
+                id: generateAppointmentId(),
+                doctor: `${selectedDoctor.nombres} ${selectedDoctor.apellidos}`,
+                specialty: selectedDoctor.especialidad,
+                date: selectedDate,
+                time: selectedTime,
+                createdAt: new Date()
+            };
+            
+            // Guardar en localStorage (simulando base de datos)
+            saveAppointment(appointment);
+            
+            // Redirigir a página de confirmación
+            window.location.href = `confirmacion.html?id=${appointment.id}`;
+        }
 
-function formatDate(date) {
-    return date.toISOString().split('T')[0];
-}
+        function generateAppointmentId() {
+            return 'cita-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        }
 
-function formatDateDisplay(date) {
-    const options = { day: 'numeric', month: 'short' };
-    return date.toLocaleDateString('es-ES', options);
-}
-</script>
+        function saveAppointment(appointment) {
+            let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+            appointments.push(appointment);
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+        }
+
+        function formatDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function formatDateDisplay(date) {
+            const options = { day: 'numeric', month: 'short' };
+            return date.toLocaleDateString('es-ES', options);
+        }
+    </script>
 </body>
 </html>
