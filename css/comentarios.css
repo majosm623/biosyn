@@ -1,0 +1,71 @@
+body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .doctor-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .doctor-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+        .doctor-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .doctor-specialty {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .doctor-rating {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        .comments-container {
+            margin-top: 30px;
+        }
+        .comment {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .comment-author {
+            font-weight: bold;
+        }
+        .comment-rating {
+            color: #ffc107;
+        }
+        .comment-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 8px 15px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-button:hover {
+            background: #0056b3;
+        }

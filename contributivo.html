@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cuenta - Usuario Contributivo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/contributivos.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-text">
+                    <h2 id="welcome-user">Bienvenido</h2>
+                    <p>Usuario Contributivo</p>
+                </div>
+            </div>
+            <div class="plan-badge">
+                <i class="fas fa-star"></i>
+                Plan Contributivo
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button class="main-button calendar">
+                <i class="fas fa-calendar-alt"></i>
+                <a href="calendario.html"></a>
+                Calendario
+            </button>
+            
+            <button class="main-button doctors">
+                <i class="fas fa-user-md"></i>
+                <a href="doctores.html"></a>
+                Doctores
+            </button>
+            
+            <button class="main-button appointment">
+                <i class="fas fa-calendar-plus"></i>
+                <a href="agenda.html"></a>
+                Agendar Cita
+            </button>
+        </div>
+        
+        <div class="coverage-card">
+            <div class="coverage-icon">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <h3>Su plan contributivo ofrece amplios beneficios</h3>
+            <p>Con su régimen contributivo, usted tiene acceso a una amplia gama de servicios médicos con coberturas especiales y la posibilidad de acceder a centros médicos de mayor complejidad.</p>
+            
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <i class="fas fa-check-circle"></i> Consultas preferenciales
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-check-circle"></i> Medicamentos con copago
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-check-circle"></i> Exámenes especializados
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-check-circle"></i> Emergencias 24/7
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-check-circle"></i> Hospitalización
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-check-circle"></i> Medicina prepagada
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mostrar el nombre del usuario almacenado
+        document.addEventListener('DOMContentLoaded', function() {
+            const userData = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (userData) {
+                document.getElementById('welcome-user').textContent = `Bienvenido, ${userData.nombre || 'Usuario'}`;
+            } else {
+                // Si no hay datos de usuario, redirigir al login
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>

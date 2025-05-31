@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar Sesión</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="css/iniciar sesion.css">
+  
+</head>
+<body>
+  <div class="formulario">
+    <h2>Iniciar Sesión</h2>
+    <form id="loginForm">
+      <label for="tipo_documento">Tipo de documento:</label>
+      <select id="tipo_documento" name="tipo_documento" required>
+        <option value="">-- Selecciona una opción --</option>
+        <option value="cc">Cédula de ciudadanía</option>
+        <option value="ti">Tarjeta de identidad</option>
+        <option value="ce">Cédula de extranjería</option>
+        <option value="pp">Pasaporte</option>
+      </select>
+
+      <label for="documento">Número de documento:</label>
+      <input type="text" id="documento" name="documento" required>
+
+      <label for="password">Contraseña:</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">Entrar</button>
+    </form>
+    <p><a href="Registrarse.html">¿No tienes cuenta? Regístrate</a></p>
+  </div>
+
+  <script>
+    // Base de datos de usuarios predefinidos
+    const usuarios = [
+        // Usuarios contributivos
+        {
+            tipo_documento: "cc",
+            documento: "12345678",
+            password: "contributivo1",
+            tipo_usuario: "contributivo",
+            nombre: "Juan Pérez"
+        },
+        {
+            tipo_documento: "ce",
+            documento: "87654321",
+            password: "contributivo2",
+            tipo_usuario: "contributivo",
+            nombre: "Carlos Rodríguez"
+        },
+        // Usuarios subsidiados
+        {
+            tipo_documento: "ti",
+            documento: "11223344",
+            password: "subsidiado1",
+            tipo_usuario: "subsidiado",
+            nombre: "María González"
+        },
+        {
+            tipo_documento: "cc",
+            documento: "44332211",
+            password: "subsidiado2",
+            tipo_usuario: "subsidiado",
+            nombre: "Ana Martínez"
+        }
+    ];
+
+    // Función para autenticar usuarios
+    function loginUser(documento, password) {
+        const tipoDocumento = document.getElementById('tipo_documento').value;
+        
+        if (!tipoDocumento) {
+            throw new Error('Por favor selecciona un tipo de documento');
+        }
+        
+        const usuario = usuarios.find(user => 
+            user.documento === documento && 
+            user.password === password &&
+            user.tipo_documento === tipoDocumento
+        );
+
+        if (!usuario) {
+            throw new Error('Documento o contraseña incorrectos');
+        }
+
+        return usuario;
+    }
+
+    // Manejar el envío del formulario
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const documento = document.getElementById('documento').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const user = loginUser(documento, password);
+            const redirectPage = user.tipo_usuario === 'contributivo' 
+                ? 'contributivo.html' 
+                : 'subsidiado.html';
+            
+            // Guardar datos del usuario en sessionStorage
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+            
+            // Redirigir a la página correspondiente
+            window.location.href = redirectPage;
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+</script>
+</body>
+</html>

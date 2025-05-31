@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comentarios - CalificaDoctores</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/comentarios.css">
+
+</head>
+<body>
+    <a href="doctores.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a doctores</a>
+
+    <script>
+        // Obtener parámetro de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const doctorId = urlParams.get('doctor');
+        
+        // Datos de doctores y comentarios
+        const doctors = {
+            'dr-lopez': {
+                name: 'Dr. Javier López',
+                specialty: 'Cardiólogo',
+                rating: '4.5',
+                avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                comments: [
+                    {
+                        author: 'Carlos M.',
+                        rating: 5,
+                        date: '15/03/2023',
+                        text: 'Excelente profesional. Me realizó un cateterismo y todo salió perfecto. Muy atento y explica todo con claridad.'
+                    },
+                    {
+                        author: 'Ana R.',
+                        rating: 4,
+                        date: '22/02/2023',
+                        text: 'Buen cardiólogo, aunque a veces tiene mucha demanda y las citas pueden demorarse un poco.'
+                    },
+                    {
+                        author: 'Roberto S.',
+                        rating: 5,
+                        date: '10/01/2023',
+                        text: 'Salvó mi vida literalmente. Detectó un problema cardíaco que otros médicos habían pasado por alto.'
+                    }
+                ]
+            },
+            'dr-martinez': {
+                name: 'Dra. Ana Martínez',
+                specialty: 'Pediatra',
+                rating: '5.0',
+                avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+                comments: [
+                    {
+                        author: 'María G.',
+                        rating: 5,
+                        date: '18/03/2023',
+                        text: 'La mejor pediatra que hemos tenido. Mi hija la adora y siempre sabe cómo tranquilizarla.'
+                    },
+                    {
+                        author: 'Jorge P.',
+                        rating: 5,
+                        date: '05/03/2023',
+                        text: 'Muy profesional y cariñosa con los niños. Explica todo con paciencia a los padres.'
+                    }
+                ]
+            },
+            'dr-rodriguez': {
+                name: 'Dr. Carlos Rodríguez',
+                specialty: 'Ortopedista',
+                rating: '4.0',
+                avatar: 'https://randomuser.me/api/portraits/men/75.jpg',
+                comments: [
+                    {
+                        author: 'Luis T.',
+                        rating: 4,
+                        date: '12/03/2023',
+                        text: 'Me operó la rodilla y estoy recuperándome bien. Buen cirujano aunque un poco serio.'
+                    },
+                    {
+                        author: 'Marta V.',
+                        rating: 3,
+                        date: '28/02/2023',
+                        text: 'Buen diagnóstico pero el seguimiento postoperatorio podría mejorar.'
+                    }
+                ]
+            },
+            'dr-garcia': {
+                name: 'Dra. Laura García',
+                specialty: 'Dermatóloga',
+                rating: '4.9',
+                avatar: 'https://randomuser.me/api/portraits/women/63.jpg',
+                comments: [
+                    {
+                        author: 'Sofía L.',
+                        rating: 5,
+                        date: '20/03/2023',
+                        text: 'Resolvió mi problema de acné que llevaba años sufriendo. Tratamiento efectivo y personalizado.'
+                    },
+                    {
+                        author: 'Elena M.',
+                        rating: 5,
+                        date: '14/03/2023',
+                        text: 'Muy profesional y con trato excelente. Me realizó un tratamiento de manchas y los resultados son increíbles.'
+                    },
+                    {
+                        author: 'David R.',
+                        rating: 4,
+                        date: '01/03/2023',
+                        text: 'Buena atención aunque un poco cara la consulta. Pero vale la pena por su experiencia.'
+                    }
+                ]
+            },
+            'dr-perez': {
+                name: 'Dra. Sofía Pérez',
+                specialty: 'Ginecóloga',
+                rating: '4.7',
+                avatar: 'https://randomuser.me/api/portraits/women/28.jpg',
+                comments: [
+                    {
+                        author: 'Andrea C.',
+                        rating: 5,
+                        date: '17/03/2023',
+                        text: 'La mejor ginecóloga que he tenido. Atenta, profesional y con mucho tacto.'
+                    },
+                    {
+                        author: 'Claudia V.',
+                        rating: 4,
+                        date: '09/03/2023',
+                        text: 'Buen trato y explica todo con detalle. Me acompañó en mi embarazo y todo salió perfecto.'
+                    }
+                ]
+            },
+            'dr-gonzalez': {
+                name: 'Dr. Ricardo González',
+                specialty: 'Neurólogo',
+                rating: '4.8',
+                avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+                comments: [
+                    {
+                        author: 'Fernando S.',
+                        rating: 5,
+                        date: '16/03/2023',
+                        text: 'Excelente diagnóstico y tratamiento para mis migrañas. Por fin encontré alivio después de años de sufrimiento.'
+                    },
+                    {
+                        author: 'Lucía M.',
+                        rating: 4,
+                        date: '08/03/2023',
+                        text: 'Muy profesional, aunque a veces usa términos muy técnicos que pueden confundir al paciente.'
+                    }
+                ]
+            },
+            'dr-morales': {
+                name: 'Dra. Patricia Morales',
+                specialty: 'Oftalmóloga',
+                rating: '4.6',
+                avatar: 'https://randomuser.me/api/portraits/women/52.jpg',
+                comments: [
+                    {
+                        author: 'Juan P.',
+                        rating: 5,
+                        date: '19/03/2023',
+                        text: 'Me operó de miopía y astigmatismo con láser. Resultados perfectos, ahora veo mejor que nunca.'
+                    },
+                    {
+                        author: 'Silvia R.',
+                        rating: 4,
+                        date: '11/03/2023',
+                        text: 'Buena atención y equipos modernos. Me diagnosticó correctamente un problema de retina.'
+                    }
+                ]
+            },
+            'dr-silva': {
+                name: 'Dr. Ernesto Silva',
+                specialty: 'Psiquiatra',
+                rating: '4.2',
+                avatar: 'https://randomuser.me/api/portraits/men/67.jpg',
+                comments: [
+                    {
+                        author: 'Alejandro M.',
+                        rating: 4,
+                        date: '13/03/2023',
+                        text: 'Me ha ayudado mucho con mi ansiedad. Buen enfoque combinando terapia y medicación cuando es necesaria.'
+                    },
+                    {
+                        author: 'Anónimo',
+                        rating: 3,
+                        date: '04/03/2023',
+                        text: 'Buen profesional pero las sesiones son un poco cortas para el precio que tiene.'
+                    }
+                ]
+            },
+            'dr-nunez': {
+                name: 'Dra. Gabriela Núñez',
+                specialty: 'Endocrinóloga',
+                rating: '4.9',
+                avatar: 'https://randomuser.me/api/portraits/women/37.jpg',
+                comments: [
+                    {
+                        author: 'Mónica G.',
+                        rating: 5,
+                        date: '21/03/2023',
+                        text: 'Me ayudó a controlar mi diabetes como nadie lo había hecho antes. Muy actualizada en los últimos tratamientos.'
+                    },
+                    {
+                        author: 'Raúl T.',
+                        rating: 5,
+                        date: '07/03/2023',
+                        text: 'Excelente profesional. Resolvió mi problema de tiroides que otros endocrinólogos no habían podido diagnosticar correctamente.'
+                    }
+                ]
+            },
+            'dr-fernandez': {
+                name: 'Dr. Luis Fernández',
+                specialty: 'Gastroenterólogo',
+                rating: '4.5',
+                avatar: 'https://randomuser.me/api/portraits/men/53.jpg',
+                comments: [
+                    {
+                        author: 'Pedro L.',
+                        rating: 5,
+                        date: '18/03/2023',
+                        text: 'Me realizó una endoscopia y fue muy profesional. El procedimiento fue indoloro gracias a su experiencia.'
+                    },
+                    {
+                        author: 'Teresa M.',
+                        rating: 4,
+                        date: '06/03/2023',
+                        text: 'Buen diagnóstico para mi problema digestivo. El tratamiento funcionó aunque tardó un poco en hacer efecto.'
+                    }
+                ]
+            },
+            'dr-ortega': {
+                name: 'Dra. Mariana Ortega',
+                specialty: 'Oncóloga',
+                rating: '5.0',
+                avatar: 'https://randomuser.me/api/portraits/women/49.jpg',
+                comments: [
+                    {
+                        author: 'Anónimo',
+                        rating: 5,
+                        date: '22/03/2023',
+                        text: 'No tengo palabras para agradecer a la Dra. Ortega. Su profesionalismo y humanidad durante mi tratamiento contra el cáncer fueron excepcionales.'
+                    },
+                    {
+                        author: 'Carlos R.',
+                        rating: 5,
+                        date: '15/03/2023',
+                        text: 'La mejor oncóloga que he conocido. Siempre actualizada en los últimos tratamientos y con un trato humano excepcional.'
+                    },
+                    {
+                        author: 'Laura S.',
+                        rating: 5,
+                        date: '03/03/2023',
+                        text: 'Gracias a su tratamiento y apoyo, mi madre está en remisión. Eterna gratitud por su dedicación.'
+                    }
+                ]
+            },
+            'dr-jimenez': {
+                name: 'Dr. Oscar Jiménez',
+                specialty: 'Neumólogo',
+                rating: '4.1',
+                avatar: 'https://randomuser.me/api/portraits/men/61.jpg',
+                comments: [
+                    {
+                        author: 'Miguel Á.',
+                        rating: 4,
+                        date: '17/03/2023',
+                        text: 'Me ayudó a controlar mi asma después de años de sufrimiento. Buen diagnóstico y tratamiento efectivo.'
+                    }
+                ]
+            },
+            'dr-herrera': {
+                name: 'Dr. Luis Herrera',
+                specialty: 'Urólogo',
+                rating: '4.6',
+                avatar: 'https://randomuser.me/api/portraits/men/39.jpg',
+                comments: [
+                    {
+                        author: 'José M.',
+                        rating: 5,
+                        date: '14/03/2023',
+                        text: 'Excelente profesional. Resolvió mi problema de próstata que otros urólogos no habían podido tratar correctamente.'
+                    },
+                    {
+                        author: 'Anónimo',
+                        rating: 4,
+                        date: '05/03/2023',
+                        text: 'Buen trato y explicaciones claras. El procedimiento fue menos molesto de lo que esperaba.'
+                    }
+                ]
+            },
+            'dr-diaz': {
+                name: 'Dra. Claudia Díaz',
+                specialty: 'Médico Internista',
+                rating: '4.9',
+                avatar: 'https://randomuser.me/api/portraits/women/34.jpg',
+                comments: [
+                    {
+                        author: 'Eduardo V.',
+                        rating: 5,
+                        date: '19/03/2023',
+                        text: 'La Dra. Díaz es increíble. Diagnosticó correctamente un problema complejo que otros médicos no habían podido identificar.'
+                    },
+                    {
+                        author: 'Rosa G.',
+                        rating: 5,
+                        date: '12/03/2023',
+                        text: 'La mejor internista que he conocido. Meticulosa, atenta y con un conocimiento enciclopédico.'
+                    }
+                ]
+            },
+            'dr-guzman': {
+                name: 'Dr. Andrés Guzmán',
+                specialty: 'Cirujano Plástico',
+                rating: '4.7',
+                avatar: 'https://randomuser.me/api/portraits/men/48.jpg',
+                comments: [
+                    {
+                        author: 'Anónimo',
+                        rating: 5,
+                        date: '16/03/2023',
+                        text: 'Resultados naturales y excelente trato. Me realizó una rinoplastia y estoy encantada con los resultados.'
+                    },
+                    {
+                        author: 'Marcela R.',
+                        rating: 4,
+                        date: '09/03/2023',
+                        text: 'Buen cirujano aunque el postoperatorio fue un poco más molesto de lo esperado. Los resultados finales son buenos.'
+                    }
+                ]
+            }
+        };
+
+        // Mostrar información del doctor seleccionado
+        function displayDoctorInfo() {
+            if (doctorId && doctors[doctorId]) {
+                const doctor = doctors[doctorId];
+                const header = document.createElement('div');
+                header.className = 'doctor-header';
+                
+                header.innerHTML = `
+                    <img src="${doctor.avatar}" alt="${doctor.name}" class="doctor-avatar">
+                    <div>
+                        <h1 class="doctor-name">${doctor.name}</h1>
+                        <div class="doctor-specialty">${doctor.specialty}</div>
+                        <div class="doctor-rating">
+                            ${'<i class="fas fa-star"></i>'.repeat(Math.floor(parseFloat(doctor.rating)))}
+                            ${parseFloat(doctor.rating) % 1 >= 0.5 ? '<i class="fas fa-star-half-alt"></i>' : ''}
+                            ${'<i class="far fa-star"></i>'.repeat(5 - Math.ceil(parseFloat(doctor.rating)))}
+                            ${doctor.rating} (${doctor.comments.length} comentarios)
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertBefore(header, document.querySelector('.comments-container'));
+                
+                // Mostrar comentarios
+                const commentsContainer = document.createElement('div');
+                commentsContainer.className = 'comments-container';
+                
+                doctor.comments.forEach(comment => {
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'comment';
+                    
+                    commentDiv.innerHTML = `
+                        <div class="comment-header">
+                            <span class="comment-author">${comment.author}</span>
+                            <span class="comment-rating">
+                                ${'<i class="fas fa-star"></i>'.repeat(comment.rating)}
+                                ${'<i class="far fa-star"></i>'.repeat(5 - comment.rating)}
+                            </span>
+                        </div>
+                        <div class="comment-date">${comment.date}</div>
+                        <p>${comment.text}</p>
+                    `;
+                    
+                    commentsContainer.appendChild(commentDiv);
+                });
+                
+                document.body.appendChild(commentsContainer);
+            } else {
+                document.body.innerHTML += '<p>Doctor no encontrado. <a href="doctores.html">Volver a la lista de doctores</a></p>';
+            }
+        }
+
+        // Ejecutar cuando se cargue la página
+        window.onload = displayDoctorInfo;
+    </script>
+</body>
+</html>
