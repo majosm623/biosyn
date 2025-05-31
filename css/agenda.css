@@ -3,323 +3,145 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif;
 }
 
+/* Contenedor principal */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f6f8;
+    background-color: #f7f9fc;
+    padding: 20px;
     color: #333;
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 40px 20px;
-}
-
-.container {
-    background: white;
-    max-width: 900px;
-    width: 100%;
-    padding: 30px 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-/* Títulos */
-h1, h2, h3, h4 {
-    margin-bottom: 15px;
-    color: #222;
 }
 
 h1 {
-    font-size: 2.2rem;
+    text-align: center;
     margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    color: #004080;
 }
 
-/* Doctor selector */
-.doctor-selector {
-    display: flex;
-    gap: 30px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-}
-
-.doctor-selector > div {
-    flex: 1 1 200px;
-}
-
-.doctor-selector h3 {
-    font-weight: 600;
-    margin-bottom: 8px;
+/* Selector de especialidad y médico */
+div > label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
 }
 
 select {
     width: 100%;
-    padding: 10px 12px;
-    font-size: 1rem;
-    border: 1.8px solid #ccc;
-    border-radius: 6px;
-    transition: border-color 0.3s ease;
-    cursor: pointer;
-}
-
-select:focus {
-    outline: none;
-    border-color: #007bff;
-}
-
-/* Calendario */
-
-.calendar {
-    margin-bottom: 35px;
-}
-
-.month-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.month-header button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.3rem;
-    color: #007bff;
-    padding: 6px 10px;
+    max-width: 300px;
+    padding: 8px;
+    margin-bottom: 20px;
     border-radius: 5px;
-    transition: background-color 0.2s ease;
+    border: 1px solid #ccc;
+    font-size: 16px;
 }
 
-.month-header button:hover {
-    background-color: #e6f0ff;
-}
-
-.month-title {
-    font-weight: 700;
-    font-size: 1.5rem;
-}
-
-.weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    background-color: #007bff;
-    color: white;
-    padding: 10px 0;
-    font-weight: 600;
-    border-radius: 8px 8px 0 0;
-}
-
-.weekday {
-    text-align: center;
-    font-size: 0.9rem;
-}
-
-/* Days grid */
-.days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-    padding-bottom: 15px;
-    border-radius: 0 0 8px 8px;
-    user-select: none;
-}
-
-/* Día individual */
-.day {
-    background-color: #f9f9f9;
-    padding: 12px 0;
-    text-align: center;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: background-color 0.25s ease, border-color 0.25s ease;
-    font-weight: 500;
-}
-
-.day:hover:not(.disabled):not(.selected) {
-    background-color: #d6e9ff;
-}
-
-.day.disabled {
-    color: #bbb;
-    cursor: default;
-    background-color: #f0f0f0;
-}
-
-.day.selected {
-    background-color: #007bff;
-    color: white;
-    font-weight: 700;
-    border-color: #0056b3;
-}
-
-/* Time slots container */
-
-.time-slots-container {
-    margin-top: 20px;
-}
-
-.time-period {
+/* Contenedor días (calendario simple) */
+#days-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-bottom: 30px;
 }
 
-.time-period h3 {
-    font-weight: 700;
-    font-size: 1.2rem;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #333;
-}
-
-.time-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    gap: 12px;
-}
-
-/* Slots individuales */
-.time-slot {
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    text-align: center;
-    user-select: none;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.time-slot.available {
-    background-color: #d4edda;
-    color: #155724;
-    border-color: #28a745;
-}
-
-.time-slot.available:hover {
-    background-color: #28a745;
-    color: white;
-    border-color: #19692c;
-}
-
-.time-slot.unavailable {
-    background-color: #f8d7da;
-    color: #721c24;
-    cursor: default;
-    border-color: #dc3545;
-}
-
-.time-slot.booked {
-    background-color: #ffeeba;
-    color: #856404;
-    cursor: default;
-    border-color: #ffc107;
-}
-
-.time-slot.selected {
-    background-color: #007bff;
-    color: white;
-    font-weight: 700;
-    border-color: #0056b3;
-}
-
-/* Leyenda */
-
-.legend {
-    display: flex;
-    gap: 25px;
-    justify-content: center;
-    margin-top: 15px;
-    flex-wrap: wrap;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.95rem;
-    color: #444;
-}
-
-.legend-color {
-    width: 20px;
-    height: 20px;
+#days-container button {
+    background-color: #e7eaf3;
+    border: 1px solid #b0b8c6;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    flex: 1 1 calc(14.28% - 10px); /* 7 días en dos filas aprox */
+    text-align: center;
+    font-size: 14px;
+    color: #004080;
 }
 
-.available-legend {
-    background-color: #28a745;
+#days-container button:hover {
+    background-color: #c5d0eb;
 }
 
-.unavailable-legend {
-    background-color: #dc3545;
+#days-container button:focus,
+#days-container button[style*="font-weight: bold"] {
+    background-color: #003366;
+    color: white;
+    outline: none;
 }
 
-.booked-legend {
-    background-color: #ffc107;
+/* Contenedores de horarios */
+#morning-slots, #afternoon-slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+#morning-slots button,
+#afternoon-slots button {
+    background-color: #e0f0ff;
+    border: 1px solid #89b1e6;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    flex: 1 1 80px;
+    font-size: 14px;
+    color: #004080;
+}
+
+#morning-slots button:hover,
+#afternoon-slots button:hover {
+    background-color: #a6c8ff;
+}
+
+#morning-slots button[style*="font-weight: bold"],
+#afternoon-slots button[style*="font-weight: bold"] {
+    background-color: #003366;
+    color: white;
 }
 
 /* Confirmación */
-
 #confirmation {
-    margin-top: 30px;
-    background-color: #e9f5ff;
-    border: 2px solid #007bff;
-    padding: 20px;
-    border-radius: 8px;
-    display: none;
+    max-width: 400px;
+    margin: 0 auto;
     text-align: center;
-}
-
-#confirmation h3 {
-    margin-bottom: 15px;
-    color: #007bff;
+    padding: 20px;
+    border: 2px solid #004080;
+    border-radius: 10px;
+    background-color: #d9e6f9;
 }
 
 #confirmation p {
-    font-size: 1.1rem;
     margin-bottom: 20px;
+    font-size: 18px;
+    color: #003366;
+    font-weight: bold;
 }
 
 #confirm-btn {
-    background-color: #007bff;
-    border: none;
+    background-color: #004080;
     color: white;
-    padding: 14px 30px;
-    font-size: 1.1rem;
-    border-radius: 8px;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s;
 }
 
 #confirm-btn:hover {
-    background-color: #0056b3;
+    background-color: #00264d;
 }
 
-/* Íconos con margen */
-h1 i, h3 i {
-    color: #007bff;
-}
-
-/* Responsive */
-@media (max-width: 650px) {
-    .doctor-selector {
-        flex-direction: column;
+/* Responsive básico */
+@media (max-width: 480px) {
+    #days-container button,
+    #morning-slots button,
+    #afternoon-slots button {
+        flex: 1 1 100%;
     }
 
-    .time-grid {
-        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-    }
-
-    h1 {
-        font-size: 1.7rem;
+    select {
+        max-width: 100%;
     }
 }
