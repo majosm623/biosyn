@@ -89,8 +89,61 @@
             </div>
         </div>
     </div>
+<!-- Confirmación -->
+<div id="confirm-section" style="display: none; text-align: center; margin-top: 2rem;">
+    <h3>Has seleccionado:</h3>
+    <p id="appointment-summary"></p>
+    <button id="confirm-btn" class="confirm-btn">Confirmar Cita</button>
+</div>
 
-    <script>
+<script>
+    let selectedSlotTime = null;
+
+    // Permitir seleccionar una hora
+    function enableSlotSelection(containerId) {
+        const container = document.getElementById(containerId);
+        container.addEventListener('click', function(e) {
+            if (e.target.classList.contains('available')) {
+                // Limpiar selección previa
+                document.querySelectorAll('.time-slot.selected').forEach(slot => slot.classList.remove('selected'));
+
+                // Marcar seleccionada
+                e.target.classList.add('selected');
+                selectedSlotTime = e.target.textContent;
+
+                // Mostrar resumen y botón
+                const summary = `Fecha: ${selectedDate.toLocaleDateString('es-ES')}<br>
+                                 Hora: ${selectedSlotTime}<br>
+                                 Médico: ${getDoctorName(selectedDoctor)}`;
+                document.getElementById('appointment-summary').innerHTML = summary;
+                document.getElementById('confirm-section').style.display = 'block';
+            }
+        });
+    }
+
+    // Función para obtener nombre completo del médico
+    function getDoctorName(doctorId) {
+        const doc = doctors.find(d => d.id === doctorId);
+        return doc ? `${doc.nombres} ${doc.apellidos}` : '';
+    }
+
+    // Activar selección en ambos bloques
+    enableSlotSelection('morning-slots');
+    enableSlotSelection('afternoon-slots');
+
+    // Confirmar cita
+    document.getElementById('confirm-btn').addEventListener('click', () => {
+        if (selectedDate && selectedDoctor && selectedSlotTime) {
+            // Guardar en localStorage (opcional) o pasar parámetros
+            const params = new URLSearchParams({
+                fecha: selectedDate.toLocaleDateString('es-ES'),
+                hora: selectedSlotTime,
+                medico: getDoctorName(selectedDoctor)
+            });
+            // Redirigir
+            window.location.href = `pagina-confirmacion.html?${params.toString()}`;
+        }
+    });
         // Variables globales
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
