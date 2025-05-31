@@ -3,117 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendar Cita Médica</title>
+    <title>Disponibilidad de Médicos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="calendario.css">
 </head>
 <body>
     <div class="container">
-        <h1><i class="fas fa-calendar-plus"></i> Agendar Cita Médica</h1>
+        <h1><i class="fas fa-calendar-alt"></i> Disponibilidad de Médicos</h1>
         
-        <div class="progress-steps">
-            <div class="step active" id="step1">
-                <span>1</span>
-                <p>Seleccionar médico</p>
-            </div>
-            <div class="step" id="step2">
-                <span>2</span>
-                <p>Elegir fecha</p>
-            </div>
-            <div class="step" id="step3">
-                <span>3</span>
-                <p>Confirmar cita</p>
-            </div>
-        </div>
-        
-        <div class="form-container" id="doctor-selection">
-            <h2><i class="fas fa-user-md"></i> Seleccione su médico</h2>
-            <div class="form-group">
-                <label for="specialty"><i class="fas fa-stethoscope"></i> Especialidad:</label>
-                <select id="specialty" required>
-                    <option value="">-- Seleccione especialidad --</option>
+        <div class="doctor-selector">
+            <div>
+                <h3>Especialidad:</h3>
+                <select id="specialty-select">
+                    <option value="">Todas las especialidades</option>
                     <option value="Cardiología">Cardiología</option>
                     <option value="Pediatría">Pediatría</option>
+                    <option value="Ortopedia">Ortopedia</option>
                     <option value="Dermatología">Dermatología</option>
                     <option value="Ginecología">Ginecología</option>
+                    <option value="Neurología">Neurología</option>
+                    <option value="Oftalmología">Oftalmología</option>
+                    <option value="Psiquiatría">Psiquiatría</option>
+                    <option value="Endocrinología">Endocrinología</option>
+                    <option value="Gastroenterología">Gastroenterología</option>
+                    <option value="Oncología">Oncología</option>
+                    <option value="Neumología">Neumología</option>
+                    <option value="Urología">Urología</option>
+                    <option value="Medicina Interna">Medicina Interna</option>
+                    <option value="Cirugía Plástica">Cirugía Plástica</option>
                 </select>
             </div>
-            
-            <div class="form-group">
-                <label for="doctor"><i class="fas fa-user-md"></i> Médico:</label>
-                <select id="doctor" disabled required>
-                    <option value="">-- Primero seleccione especialidad --</option>
+
+            <div>
+                <h3>Médico:</h3>
+                <select id="doctor-select">
+                    <option value="">Seleccione un médico</option>
                 </select>
             </div>
-            
-            <button class="btn-next" id="btn-next-doctor">Siguiente <i class="fas fa-arrow-right"></i></button>
         </div>
         
-        <div class="form-container hidden" id="date-selection">
-            <h2><i class="far fa-calendar-alt"></i> Seleccione fecha y hora</h2>
-            
-            <div class="calendar-header">
-                <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
-                <h3 id="current-month">Mes Año</h3>
-                <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+        <div id="time-slots-container" style="display: none;">
+            <div class="time-period">
+                <h3><i class="fas fa-sun"></i> Turno Mañana (7:00 - 12:00)</h3>
+                <div id="morning-slots" class="time-grid"></div>
             </div>
             
-            <div class="calendar">
-                <div class="weekdays">
-                    <div>Dom</div>
-                    <div>Lun</div>
-                    <div>Mar</div>
-                    <div>Mié</div>
-                    <div>Jue</div>
-                    <div>Vie</div>
-                    <div>Sáb</div>
+            <div class="time-period">
+                <h3><i class="fas fa-moon"></i> Turno Tarde (14:00 - 18:00)</h3>
+                <div id="afternoon-slots" class="time-grid"></div>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color morning-legend"></div>
+                    <span>Horario mañana</span>
                 </div>
-                <div class="days" id="calendar-days"></div>
-            </div>
-            
-            <div class="time-slots hidden" id="time-slots">
-                <h3>Horarios disponibles</h3>
-                <div class="slots-container" id="slots-container"></div>
-            </div>
-            
-            <div class="navigation-buttons">
-                <button class="btn-back" id="btn-back-date"><i class="fas fa-arrow-left"></i> Anterior</button>
-                <button class="btn-next hidden" id="btn-next-date" disabled>Siguiente <i class="fas fa-arrow-right"></i></button>
-            </div>
-        </div>
-        
-        <div class="form-container hidden" id="confirmation">
-            <h2><i class="fas fa-check-circle"></i> Confirme su cita</h2>
-            
-            <div class="appointment-summary">
-                <p><strong>Médico:</strong> <span id="confirm-doctor"></span></p>
-                <p><strong>Especialidad:</strong> <span id="confirm-specialty"></span></p>
-                <p><strong>Fecha:</strong> <span id="confirm-date"></span></p>
-                <p><strong>Hora:</strong> <span id="confirm-time"></span></p>
-            </div>
-            
-            <div class="form-group">
-                <label for="patient-name"><i class="fas fa-user"></i> Nombre completo:</label>
-                <input type="text" id="patient-name" required placeholder="Ingrese su nombre completo">
-            </div>
-            
-            <div class="form-group">
-                <label for="patient-phone"><i class="fas fa-phone"></i> Teléfono:</label>
-                <input type="tel" id="patient-phone" required placeholder="Ingrese su teléfono">
-            </div>
-            
-            <div class="form-group">
-                <label for="patient-email"><i class="fas fa-envelope"></i> Email (opcional):</label>
-                <input type="email" id="patient-email" placeholder="Ingrese su email">
-            </div>
-            
-            <div class="navigation-buttons">
-                <button class="btn-back" id="btn-back-confirm"><i class="fas fa-arrow-left"></i> Anterior</button>
-                <button class="btn-confirm" id="btn-confirm-appointment">Confirmar Cita <i class="fas fa-calendar-check"></i></button>
+                <div class="legend-item">
+                    <div class="legend-color afternoon-legend"></div>
+                    <span>Horario tarde</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color available-legend"></div>
+                    <span>Disponible</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color unavailable-legend"></div>
+                    <span>No disponible</span>
+                </div>
             </div>
         </div>
     </div>
-    
-    <script src="js/script.js"></script>
+
+    <script>
+        // Variables globales
+        let availability = {};
+        const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        const morningSlots = ['7:00', '8:00', '9:00', '10:00', '11:00'];
+        const afternoonSlots = ['14:00', '15:00', '16:00', '17:00'];
+        
+        // Simulación de datos de médicos
+        const doctors = [
+            { id: "dr1", nombres: "Javier", apellidos: "López", especialidad: "Cardiología" },
+            { id: "dr2", nombres: "Ana", apellidos: "Martínez", especialidad: "Pediatría" },
+            { id: "dr3", nombres: "Carlos", apellidos: "Rodríguez", especialidad: "Ortopedia" },
+            { id: "dr4", nombres: "Laura", apellidos: "García", especialidad: "Dermatología" },
+            { id: "dr5", nombres: "Sofía", apellidos: "Pérez", especialidad: "Ginecología" },
+            { id: "dr6", nombres: "Ricardo", apellidos: "González", especialidad: "Neurología" },
+            { id: "dr7", nombres: "Patricia", apellidos: "Morales", especialidad: "Oftalmología" },
+            { id: "dr8", nombres: "Ernesto", apellidos: "Silva", especialidad: "Psiquiatría" },
+            { id: "dr9", nombres: "Gabriela", apellidos: "Núñez", especialidad: "Endocrinología" },
+            { id: "dr10", nombres: "Luis", apellidos: "Fernández", especialidad: "Gastroenterología" },
+            { id: "dr11", nombres: "Mariana", apellidos: "Ortega", especialidad: "Oncología" },
+            { id: "dr12", nombres: "Oscar", apellidos: "Jiménez", especialidad: "Neumología" },
+            { id: "dr13", nombres: "Luis", apellidos: "Herrera", especialidad: "Urología" },
+            { id: "dr14", nombres: "Claudia", apellidos: "Díaz", especialidad: "Medicina Interna" },
+            { id: "dr15", nombres: "Andrés", apellidos: "Guzmán", especialidad: "Cirugía Plástica" }
+        ];
+        
+        // Cargar médicos al iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDoctors();
+            
+            // Configurar eventos para los selectores
+            document.getElementById('specialty-select').addEventListener('change', function() {
+                filterDoctors();
+                document.getElementById('time-slots-container').style.display = 'none';
+            });
+            
+            document.getElementById('doctor-select').addEventListener('change', function() {
+                const doctorId = this.value;
+                if (doctorId) {
+                    loadAvailability(doctorId);
+                } else {
+                    document.getElementById('time-slots-container').style.display = 'none';
+                }
+            });
+        });
+        
+        // Filtrar médicos por especialidad
+        function filterDoctors() {
+            const specialtySelect = document.getElementById('specialty-select');
+            const doctorSelect = document.getElementById('doctor-select');
+            const selectedSpecialty = specialtySelect.value;
+            
+            // Resetear selección de médico
+            doctorSelect.value = '';
+            
+            // Mostrar solo médicos de la especialidad seleccionada
+            for (let i = 1; i < doctorSelect.options.length; i++) {
+                const option = doctorSelect.options[i];
+                const specialty = option.getAttribute('data-specialty');
+                
+                if (!selectedSpecialty || specialty === selectedSpecialty) {
+                    option.style.display = '';
+                } else {
+                    option.style.display = 'none';
+                }
+            }
+        }
+        
+        // Cargar lista de médicos
+        function loadDoctors() {
+            const select = document.getElementById('doctor-select');
+            
+            select.innerHTML = '<option value="">Seleccione un médico</option>';
+            doctors.forEach(doctor => {
+                const option = document.createElement('option');
+                option.value = doctor.id;
+                option.textContent = `${doctor.nombres} ${doctor.apellidos} - ${doctor.especialidad}`;
+                option.setAttribute('data-specialty', doctor.especialidad);
+                select.appendChild(option);
+            });
+        }
+        
+        // Cargar disponibilidad para un médico
+        function loadAvailability(doctorId) {
+            document.getElementById('time-slots-container').style.display = 'block';
+            
+            // Simular disponibilidad
+            const today = new Date();
+            const nextMonday = new Date();
+            nextMonday.setDate(today.getDate() + (1 + 7 - today.getDay()) % 7);
+            
+            // Generar disponibilidad aleatoria
+            availability = {};
+            for (let i = 0; i < 5; i++) {
+                availability[i] = {};
+                
+                // Mañana
+                morningSlots.forEach(time => {
+                    availability[i][time] = Math.random() > 0.3 ? 1 : 0;
+                });
+                
+                // Tarde
+                afternoonSlots.forEach(time => {
+                    availability[i][time] = Math.random() > 0.3 ? 1 : 0;
+                });
+            }
+            
+            generateTimeSlots();
+        }
+        
+        // Generar los slots de tiempo en la UI
+        function generateTimeSlots() {
+            const morningContainer = document.getElementById('morning-slots');
+            const afternoonContainer = document.getElementById('afternoon-slots');
+            
+            morningContainer.innerHTML = '';
+            afternoonContainer.innerHTML = '';
+            
+            // Crear columnas por día
+            days.forEach((day, dayIndex) => {
+                // Columna para mañana
+                const morningColumn = document.createElement('div');
+                morningColumn.className = 'day-column';
+                
+                const morningHeader = document.createElement('div');
+                morningHeader.className = 'day-header';
+                morningHeader.textContent = day;
+                morningColumn.appendChild(morningHeader);
+                
+                const morningSlotsContainer = document.createElement('div');
+                morningSlotsContainer.className = 'time-slots';
+                
+                morningSlots.forEach(time => {
+                    const isAvailable = availability[dayIndex][time] > 0;
+                    
+                    const slot = document.createElement('div');
+                    slot.className = `time-slot morning ${isAvailable ? 'available' : 'unavailable'}`;
+                    slot.textContent = time;
+                    
+                    morningSlotsContainer.appendChild(slot);
+                });
+                
+                morningColumn.appendChild(morningSlotsContainer);
+                morningContainer.appendChild(morningColumn);
+                
+                // Columna para tarde
+                const afternoonColumn = document.createElement('div');
+                afternoonColumn.className = 'day-column';
+                
+                const afternoonHeader = document.createElement('div');
+                afternoonHeader.className = 'day-header';
+                afternoonHeader.textContent = day;
+                afternoonColumn.appendChild(afternoonHeader);
+                
+                const afternoonSlotsContainer = document.createElement('div');
+                afternoonSlotsContainer.className = 'time-slots';
+                
+                afternoonSlots.forEach(time => {
+                    const isAvailable = availability[dayIndex][time] > 0;
+                    
+                    const slot = document.createElement('div');
+                    slot.className = `time-slot afternoon ${isAvailable ? 'available' : 'unavailable'}`;
+                    slot.textContent = time;
+                    
+                    afternoonSlotsContainer.appendChild(slot);
+                });
+                
+                afternoonColumn.appendChild(afternoonSlotsContainer);
+                afternoonContainer.appendChild(afternoonColumn);
+            });
+        }
+    </script>
 </body>
 </html>
